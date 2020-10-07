@@ -103,3 +103,9 @@ func (p *Cluster) Select(key []byte) *Shard {
 func (p *Cluster) Pick() *Shard {
 	return p.Shards[0]
 }
+
+func (p *Cluster) Map(f func(*Shard)) {
+	for _, shard := range p.Shards {
+		f(shard)
+	}
+}
