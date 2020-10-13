@@ -67,12 +67,14 @@ func NewCluster(conf Configer, exec func(*sql.DB, DBHandler, TablePartition)) (*
 		return nil, fmt.Errorf("cluster must have %d shards, but config %d", len(conf.GetShardsConfig()), conf.GetClusterConfig().GetDbPartitionConfig().GetTotal())
 	}
 
-	// 分表
-	tp := NewTablePartition(conf.GetClusterConfig().GetTablePartitionConfig())
 	var shards []*Shard
 	for i, cs := range conf.GetShardsConfig() {
 		// 设置分库
 		cs.SetDbname(dp.Divide(cs.GetDbname(), i))
+
+		// 分表
+		tp := NewTablePartition(conf.GetClusterConfig().GetTablePartitionConfig(), i)
+
 		shards = append(shards, NewShard(cs, AddExecutor(exec), AddTablePartition(tp)))
 	}
 

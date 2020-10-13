@@ -57,7 +57,7 @@ func TestNewCluster(t *testing.T) {
 				return row.Scan(&id, &test)
 
 			})
-			fmt.Println(id, test)
+			//fmt.Println(id, test)
 		})
 	}
 

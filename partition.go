@@ -124,9 +124,12 @@ func (p *PreloadTablePartition) Select(key []byte, prefix string) string {
 	}
 }
 
-func NewTablePartition(conf TablePartitionConfiger) TablePartition {
+func NewTablePartition(conf TablePartitionConfiger, start int) TablePartition {
 	switch conf.GetType() {
 	case "modular":
+		start = 0
+		fallthrough
+	case "zone":
 		tp := &PreloadTablePartition{
 			Partition: distributed.ModularHashIEEE(),
 		}
@@ -136,8 +139,7 @@ func NewTablePartition(conf TablePartitionConfiger) TablePartition {
 			var t []string
 
 			for i := 0; i < c.GetTotal(); i++ {
-				t = append(t, DividesGenerate(c.GetName(), i))
-
+				t = append(t, DividesGenerate(c.GetName(), (start*c.GetTotal())+i))
 			}
 			tp.preload[c.GetName()] = t
 		}
