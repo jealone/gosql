@@ -44,6 +44,7 @@ func TestParseYamlConfigFile(t *testing.T) {
 
 			if len(got.Shards) != len(tt.want.Shards) {
 				t.Errorf("got Shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
+				t.FailNow()
 			}
 
 			for i := 0; i < len(tt.want.Shards); i++ {
@@ -99,6 +100,7 @@ func TestParseYamlConfig(t *testing.T) {
 
 			if len(got.Shards) != len(tt.want.Shards) {
 				t.Errorf("got Shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
+				t.FailNow()
 			}
 
 			for i := 0; i < len(tt.want.Shards); i++ {

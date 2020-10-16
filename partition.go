@@ -82,6 +82,9 @@ func (p *DbPartition) Select(key []byte, table string) string {
 }
 
 func (p *DbPartition) Pick(prefix string, num int) string {
+	if p.Total <= 1 {
+		return prefix
+	}
 	return DividesGenerate(prefix, num)
 }
 
@@ -258,14 +261,16 @@ func (p *PreloadTablePartition) pick(index int) string {
 
 func NewTablePartition(conf TablePartitionConfiger) TablePartition {
 
-	if conf.GetTableTotal() <= 1 {
+	total := conf.GetTableTotal() * conf.GetDbTotal()
+
+	if total <= 1 {
 		return GetNopTablePartition()
 	}
 
 	tp := &PreloadTablePartition{
 		Table:           conf.GetName(),
 		partition:       distributed.ModularHashIEEE(),
-		TableTotal:      conf.GetTableTotal() * conf.GetDbTotal(),
+		TableTotal:      total,
 		TableChunkTotal: conf.GetTableTotal(),
 	}
 
