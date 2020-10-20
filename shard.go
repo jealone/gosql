@@ -215,7 +215,7 @@ func (s *Shard) Write(handler DBHandler) {
 func (s *Shard) Read(handler DBHandler) {
 	db := s.Replica.GetDB()
 
-	if nil != db {
+	if nil == db {
 		db = s.Master.GetDB()
 	}
 
