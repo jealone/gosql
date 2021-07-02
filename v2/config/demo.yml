@@ -1,0 +1,48 @@
+cluster:
+  replication:
+    type: roundrobin
+  partition:
+    db:
+      type: modular
+      total: 2
+    table:
+      type: modular
+      specs:
+      - name: test
+        total: 4
+      - name: user
+        total: 4
+db:
+  driver: mysql
+  dbname: "test"
+  conn:
+    max_life_time:
+    max_idle_conns:
+    max_open_conns:
+shards:
+- master:
+    host: "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8
+  replicas:
+    hosts:
+    - "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8
+- master:
+    host: "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8
+  replicas:
+    hosts:
+    - "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8
