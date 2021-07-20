@@ -53,6 +53,30 @@ var (
 	)
 )
 
+var (
+	DynamicClusterSet = wire.NewSet(
+		wire.Bind(new(Cluster), new(*DynamicCluster)),
+		wire.Struct(new(DynamicCluster), "*"),
+		ProvideStaticShards,
+		ProvideDynamicRe,
+	)
+
+	DailyDbSelectorSet = wire.NewSet(
+		wire.Bind(new(DbSelector), new(*DailyDbSelector)),
+		ProvideDailyDbSelector,
+	)
+
+	MonthlyDbSelectorSet = wire.NewSet(
+		wire.Bind(new(DbSelector), new(*MonthlyDbSelector)),
+		ProvideMonthlyDbSelector,
+	)
+
+	AnnuallyDbSelectorSet = wire.NewSet(
+		wire.Bind(new(DbSelector), new(*AnnuallyDbSelector)),
+		ProvideAnnuallyDbSelector,
+	)
+)
+
 type Partition interface {
 	Partition([]byte, int) int
 }

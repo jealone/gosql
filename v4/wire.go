@@ -52,3 +52,7 @@ func mockMonthlyStaticCluster(path string) (*StaticCluster, func(), error) {
 func mockAnnuallyStaticCluster(path string) (*StaticCluster, func(), error) {
 	panic(wire.Build(mockConfigSet, StaticClusterSet, StandardShardingSet, RoundRobinLBSet, DefaultDbExecutorSet, AnnuallyTableSelectorSet, DefaultPartitionSet))
 }
+
+func mockMonthlyDynamicCluster(path string) (*DynamicCluster, func(), error) {
+	panic(wire.Build(mockConfigSet, DynamicClusterSet, MonthlyDbSelectorSet, StandardShardingSet, RoundRobinLBSet, DefaultDbExecutorSet, MonthlyTableSelectorSet, DefaultPartitionSet))
+}

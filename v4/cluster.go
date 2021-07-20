@@ -1,6 +1,11 @@
 package gosql
 
-import "database/sql"
+import (
+	"bytes"
+	"database/sql"
+)
+
+type DbExecutor func(*sql.DB, DBHandler, int, *bytes.Buffer)
 
 type Cluster interface {
 	Write(table string, key []byte, handler DBHandler, params ...interface{})

@@ -213,6 +213,42 @@ func mockAnnuallyStaticCluster(path string) (*StaticCluster, func(), error) {
 	}, nil
 }
 
+func mockMonthlyDynamicCluster(path string) (*DynamicCluster, func(), error) {
+	file, cleanup, err := ProvideYamlConfigFile(path)
+	if err != nil {
+		return nil, nil, err
+	}
+	decoder := ProvideYamlDecoder(file)
+	yamlConfig, err := ProvideYamlConfig(decoder)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	config, err := ProvideConfig(yamlConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	v := ProvideDynamicRe(config)
+	modularHash := distributed.ModularHashIEEE()
+	monthlyTableSelector := ProvideMonthlyTableSelector(config, modularHash)
+	standardSharding := ProvideStandardSharding(config, monthlyTableSelector)
+	monthlyDbSelector := ProvideMonthlyDbSelector()
+	dbExecutor := _wireDbExecutorValue
+	roundRobinSelector := ProvideRoundRobinSelector()
+	dynamicCluster := &DynamicCluster{
+		re:       v,
+		config:   config,
+		sharding: standardSharding,
+		selector: monthlyDbSelector,
+		executor: dbExecutor,
+		lb:       roundRobinSelector,
+	}
+	return dynamicCluster, func() {
+		cleanup()
+	}, nil
+}
+
 // wire.go:
 
 var (

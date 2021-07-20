@@ -1,12 +1,5 @@
 package gosql
 
-import (
-	"bytes"
-	"database/sql"
-)
-
-type DbExecutor func(*sql.DB, DBHandler, int, *bytes.Buffer)
-
 type StaticCluster struct {
 	sharding Sharding
 	shards   []Shard
