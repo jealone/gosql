@@ -1,0 +1,45 @@
+cluster:
+  driver: mysql
+  type: static
+  dbname: "test"
+  conn:
+    max_life_time: 5000
+    max_idle_conns: 20
+    max_open_conns: 0
+  sharding:
+    total: 2
+    table:
+    - name: test
+      total: 8
+    - name: user
+      total: 4
+    - name: bills
+      total: 8
+shards:
+- master:
+    host: "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8mb4
+  replicas:
+    hosts:
+    - "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8
+- master:
+    host: "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8mb4
+  replicas:
+    hosts:
+    - "127.0.0.1:3306"
+    user: root
+    password: admin
+    params:
+      charset: utf8mb4
+
