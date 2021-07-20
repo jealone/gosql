@@ -14,7 +14,7 @@ var DefaultDBExecutor DbExecutor = func(db *sql.DB, handler DBHandler, node int,
 type StaticShard struct {
 	Master  *sql.DB
 	Replica []*sql.DB
-	lb      LoadBalance
+	lb      Replication
 }
 
 func (s *StaticShard) GetMaster() *sql.DB {
@@ -26,7 +26,7 @@ func (s *StaticShard) GetReplica() *sql.DB {
 	if 0 == total {
 		return s.Master
 	}
-	i := s.lb.Select(total)
+	i := s.lb.Replicate(total)
 	if i < total {
 		return s.Replica[i]
 	} else {
@@ -38,7 +38,7 @@ func (s *StaticShard) GetReplicaTotal() int {
 	return len(s.Replica)
 }
 
-func ProvideStaticShards(conf *Config, sharding Sharding, lb LoadBalance) []Shard {
+func ProvideStaticShards(conf *Config, sharding Sharding, lb Replication) []Shard {
 	var shards []Shard
 	for i, c := range conf.GetShardsConfig() {
 		shards = append(shards, NewShard(c, sharding.Allocation(i, sharding.GetDbname()), lb))
@@ -46,7 +46,7 @@ func ProvideStaticShards(conf *Config, sharding Sharding, lb LoadBalance) []Shar
 	return shards
 }
 
-func NewShard(conf ShardConfig, dbname string, lb LoadBalance) *StaticShard {
+func NewShard(conf ShardConfig, dbname string, lb Replication) *StaticShard {
 
 	conf.GetMasterConfig()
 	master := NewDB(conf.GetMasterConfig().GetDriver(), conf.GetMasterConfig().GetUrl(dbname), conf.GetMasterConfig().GetConn())

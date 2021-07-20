@@ -96,8 +96,8 @@ func mockStaticCluster(path string) (*StaticCluster, func(), error) {
 	modularHash := distributed.ModularHashIEEE()
 	standardTableSelector := ProvideStandardTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, standardTableSelector)
-	roundRobin := ProvideRoundRobin()
-	v := ProvideStaticShards(config, standardSharding, roundRobin)
+	roundRobinSelector := ProvideRoundRobinSelector()
+	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -133,8 +133,8 @@ func mockDailyStaticCluster(path string) (*StaticCluster, func(), error) {
 	modularHash := distributed.ModularHashIEEE()
 	dailyTableSelector := ProvideDailyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, dailyTableSelector)
-	roundRobin := ProvideRoundRobin()
-	v := ProvideStaticShards(config, standardSharding, roundRobin)
+	roundRobinSelector := ProvideRoundRobinSelector()
+	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -166,8 +166,8 @@ func mockMonthlyStaticCluster(path string) (*StaticCluster, func(), error) {
 	modularHash := distributed.ModularHashIEEE()
 	monthlyTableSelector := ProvideMonthlyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, monthlyTableSelector)
-	roundRobin := ProvideRoundRobin()
-	v := ProvideStaticShards(config, standardSharding, roundRobin)
+	roundRobinSelector := ProvideRoundRobinSelector()
+	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -199,8 +199,8 @@ func mockAnnuallyStaticCluster(path string) (*StaticCluster, func(), error) {
 	modularHash := distributed.ModularHashIEEE()
 	annuallyTableSelector := ProvideAnnuallyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, annuallyTableSelector)
-	roundRobin := ProvideRoundRobin()
-	v := ProvideStaticShards(config, standardSharding, roundRobin)
+	roundRobinSelector := ProvideRoundRobinSelector()
+	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,

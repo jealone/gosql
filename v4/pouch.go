@@ -19,8 +19,8 @@ var (
 	)
 
 	RoundRobinLBSet = wire.NewSet(
-		wire.Bind(new(LoadBalance), new(*RoundRobin)),
-		ProvideRoundRobin,
+		wire.Bind(new(Replication), new(*RoundRobinSelector)),
+		ProvideRoundRobinSelector,
 	)
 
 	DefaultDbExecutorSet = wire.NewSet(
@@ -55,4 +55,16 @@ var (
 
 type Partition interface {
 	Partition([]byte, int) int
+}
+
+type Replication interface {
+	Replicate(int) int
+}
+
+type (
+	RoundRobinSelector = distributed.RoundRobinSelector
+)
+
+func ProvideRoundRobinSelector() *RoundRobinSelector {
+	return distributed.NewRoundRobin()
 }
