@@ -39,6 +39,9 @@ func (s *StaticShard) GetReplicaTotal() int {
 }
 
 func ProvideStaticShards(conf *Config, sharding Sharding, lb Replication) []Shard {
+	if "static" != conf.GetShardingConfig().GetType() {
+		panic("static cluster type must be static ")
+	}
 	var shards []Shard
 	for i, c := range conf.GetShardsConfig() {
 		shards = append(shards, NewShard(c, sharding.Allocation(i, sharding.GetDbname()), lb))

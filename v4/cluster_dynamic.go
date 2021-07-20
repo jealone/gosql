@@ -9,6 +9,10 @@ import (
 )
 
 func ProvideDynamicRe(conf *Config) map[string]*sql.DB {
+	if "dynamic" != conf.GetShardingConfig().GetType() {
+		panic("dynamic cluster type must be dynamic ")
+	}
+
 	m := make(map[string]*sql.DB, conf.GetShardingConfig().GetTotal())
 	return m
 }

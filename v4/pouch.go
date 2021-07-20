@@ -57,7 +57,6 @@ var (
 	DynamicClusterSet = wire.NewSet(
 		wire.Bind(new(Cluster), new(*DynamicCluster)),
 		wire.Struct(new(DynamicCluster), "*"),
-		ProvideStaticShards,
 		ProvideDynamicRe,
 	)
 

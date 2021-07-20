@@ -65,6 +65,7 @@ func ProvideConfig(config *YamlConfig) (*Config, error) {
 		ShardsConfig: scs,
 		ShardingConfig: ShardingConfig{
 			Dbname: config.Cluster.Dbname,
+			Type:   config.Cluster.Type,
 			Total:  config.Cluster.Sharding.DbTotal,
 			Table:  ss,
 		}}, nil
@@ -86,11 +87,16 @@ func (c Config) GetShardingConfig() ShardingConfig {
 type ShardingConfig struct {
 	Dbname string
 	Total  int
+	Type   string
 	Table  []ShardingTableConfig
 }
 
 func (s ShardingConfig) GetDbname() string {
 	return s.Dbname
+}
+
+func (s ShardingConfig) GetType() string {
+	return s.Type
 }
 
 func (s ShardingConfig) GetTotal() int {

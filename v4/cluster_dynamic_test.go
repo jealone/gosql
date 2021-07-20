@@ -9,7 +9,7 @@ import (
 )
 
 func TestMonthlyDynamicCluster(t *testing.T) {
-	c, cleanup, err := mockMonthlyDynamicCluster("config/demo.yml")
+	c, cleanup, err := mockMonthlyDynamicCluster("config/dynamic.yml")
 	if nil != err {
 		t.Fatal(err)
 	}
