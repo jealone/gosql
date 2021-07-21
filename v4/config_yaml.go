@@ -37,12 +37,12 @@ func ProvideYamlConfig(dec Decoder) (*YamlConfig, error) {
 
 type YamlConfig struct {
 	Cluster YamlClusterConfig   `yaml:"cluster"`
-	Shards  []*YamlShardsConfig `yaml:"shards"`
+	Shards  []*YamlShardsConfig `yaml:"Shards"`
 }
 
 type YamlClusterConfig struct {
 	YamlDBConfig `yaml:",inline"`
-	Sharding     YamlShardingConfig `yaml:"sharding"`
+	Sharding     YamlShardingConfig `yaml:"Sharding"`
 }
 
 type YamlDBConfig struct {

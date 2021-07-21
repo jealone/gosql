@@ -1,28 +1,28 @@
 package gosql
 
 type StaticCluster struct {
-	sharding Sharding
-	shards   []Shard
-	config   *Config
-	executor DbExecutor
+	Sharding Sharding
+	Shards   []Shard
+	Config   *Config
+	Executor DbExecutor
 }
 
 func (s *StaticCluster) Write(table string, key []byte, handler DBHandler, params ...interface{}) {
-	di, ti, t := s.sharding.Select(table, key, params...)
+	di, ti, t := s.Sharding.Select(table, key, params...)
 	defer ReleaseBuffer(t)
-	s.executor(s.shards[di].GetMaster(), handler, ti, t)
+	s.Executor(s.Shards[di].GetMaster(), handler, ti, t)
 }
 
 func (s *StaticCluster) Read(table string, key []byte, handler DBHandler, params ...interface{}) {
-	di, ti, t := s.sharding.Select(table, key, params...)
+	di, ti, t := s.Sharding.Select(table, key, params...)
 	defer ReleaseBuffer(t)
-	s.executor(s.shards[di].GetReplica(), handler, ti, t)
+	s.Executor(s.Shards[di].GetReplica(), handler, ti, t)
 }
 
 func (s *StaticCluster) TableSelector() TableSelector {
-	return s.sharding.TableSelector()
+	return s.Sharding.TableSelector()
 }
 
 func (s *StaticCluster) GetShardsTotal() int {
-	return len(s.shards)
+	return len(s.Shards)
 }

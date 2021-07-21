@@ -20,7 +20,7 @@ func TestParseYamlConfigFile(t *testing.T) {
 		{
 			name: "normal",
 			args: args{
-				path: "config/demo.yml",
+				path: "Config/demo.yml",
 			},
 			want: wantYamlConfig(),
 		},
@@ -43,18 +43,18 @@ func TestParseYamlConfigFile(t *testing.T) {
 			}
 
 			if len(got.Shards) != len(tt.want.Shards) {
-				t.Errorf("got shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
+				t.Errorf("got Shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
 				t.FailNow()
 			}
 
 			for i := 0; i < len(tt.want.Shards); i++ {
 
 				if !reflect.DeepEqual(got.Shards[i].Master, tt.want.Shards[i].Master) {
-					t.Errorf("node %d got shards Master = %+v, want %+v", i, got.Shards[i].Master, tt.want.Shards[i].Master)
+					t.Errorf("node %d got Shards Master = %+v, want %+v", i, got.Shards[i].Master, tt.want.Shards[i].Master)
 				}
 
 				if !reflect.DeepEqual(got.Shards[i].Replicas, tt.want.Shards[i].Replicas) {
-					t.Errorf("node %d got shards Replicas = %+v, want %+v", i, got.Shards[i].Replicas, tt.want.Shards[i].Replicas)
+					t.Errorf("node %d got Shards Replicas = %+v, want %+v", i, got.Shards[i].Replicas, tt.want.Shards[i].Replicas)
 				}
 			}
 		})
@@ -67,7 +67,7 @@ func TestParseYamlConfig(t *testing.T) {
 		rd io.Reader
 	}
 
-	file, _ := os.Open("config/demo.yml")
+	file, _ := os.Open("Config/demo.yml")
 
 	tests := []struct {
 		name string
@@ -99,18 +99,18 @@ func TestParseYamlConfig(t *testing.T) {
 			}
 
 			if len(got.Shards) != len(tt.want.Shards) {
-				t.Errorf("got shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
+				t.Errorf("got Shards len = %+v, want %+v", len(got.Shards), len(tt.want.Shards))
 				t.FailNow()
 			}
 
 			for i := 0; i < len(tt.want.Shards); i++ {
 
 				if !reflect.DeepEqual(got.Shards[i].Master, tt.want.Shards[i].Master) {
-					t.Errorf("node %d got shards Master = %+v, want %+v", i, got.Shards[i].Master, tt.want.Shards[i].Master)
+					t.Errorf("node %d got Shards Master = %+v, want %+v", i, got.Shards[i].Master, tt.want.Shards[i].Master)
 				}
 
 				if !reflect.DeepEqual(got.Shards[i].Replicas, tt.want.Shards[i].Replicas) {
-					t.Errorf("node %d got shards Replicas = %+v, want %+v", i, got.Shards[i].Replicas, tt.want.Shards[i].Replicas)
+					t.Errorf("node %d got Shards Replicas = %+v, want %+v", i, got.Shards[i].Replicas, tt.want.Shards[i].Replicas)
 				}
 			}
 

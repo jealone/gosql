@@ -9,7 +9,7 @@ import (
 )
 
 func TestCluster(t *testing.T) {
-	c, cleanup, err := mockStaticCluster("config/demo.yml")
+	c, cleanup, err := mockStaticCluster("Config/demo.yml")
 	if nil != err {
 		t.Fatal(err)
 	}
@@ -26,7 +26,7 @@ func TestCluster(t *testing.T) {
 }
 
 func TestMonthlyCluster(t *testing.T) {
-	c, cleanup, err := mockMonthlyStaticCluster("config/demo.yml")
+	c, cleanup, err := mockMonthlyStaticCluster("Config/demo.yml")
 	if nil != err {
 		t.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func TestMonthlyCluster(t *testing.T) {
 }
 
 func TestDailyCluster(t *testing.T) {
-	c, cleanup, err := mockDailyStaticCluster("config/demo.yml")
+	c, cleanup, err := mockDailyStaticCluster("Config/demo.yml")
 	if nil != err {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestDailyCluster(t *testing.T) {
 }
 
 func TestAnnuallyCluster(t *testing.T) {
-	c, cleanup, err := mockAnnuallyStaticCluster("config/demo.yml")
+	c, cleanup, err := mockAnnuallyStaticCluster("Config/demo.yml")
 	if nil != err {
 		t.Fatal(err)
 	}

@@ -104,10 +104,10 @@ func mockStaticCluster(path string) (*StaticCluster, func(), error) {
 	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
-		sharding: standardSharding,
-		shards:   v,
-		config:   config,
-		executor: dbExecutor,
+		Sharding: standardSharding,
+		Shards:   v,
+		Config:   config,
+		Executor: dbExecutor,
 	}
 	return staticCluster, func() {
 		cleanup()
@@ -145,10 +145,10 @@ func mockDailyStaticCluster(path string) (*StaticCluster, func(), error) {
 	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
-		sharding: standardSharding,
-		shards:   v,
-		config:   config,
-		executor: dbExecutor,
+		Sharding: standardSharding,
+		Shards:   v,
+		Config:   config,
+		Executor: dbExecutor,
 	}
 	return staticCluster, func() {
 		cleanup()
@@ -182,10 +182,10 @@ func mockMonthlyStaticCluster(path string) (*StaticCluster, func(), error) {
 	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
-		sharding: standardSharding,
-		shards:   v,
-		config:   config,
-		executor: dbExecutor,
+		Sharding: standardSharding,
+		Shards:   v,
+		Config:   config,
+		Executor: dbExecutor,
 	}
 	return staticCluster, func() {
 		cleanup()
@@ -219,10 +219,10 @@ func mockAnnuallyStaticCluster(path string) (*StaticCluster, func(), error) {
 	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
-		sharding: standardSharding,
-		shards:   v,
-		config:   config,
-		executor: dbExecutor,
+		Sharding: standardSharding,
+		Shards:   v,
+		Config:   config,
+		Executor: dbExecutor,
 	}
 	return staticCluster, func() {
 		cleanup()
@@ -257,12 +257,12 @@ func mockMonthlyDynamicCluster(path string) (*DynamicCluster, func(), error) {
 	dbExecutor := _wireDbExecutorValue
 	roundRobinSelector := ProvideRoundRobinSelector()
 	dynamicCluster := &DynamicCluster{
-		re:       v,
-		config:   config,
-		sharding: standardSharding,
-		selector: monthlyDbSelector,
-		executor: dbExecutor,
-		lb:       roundRobinSelector,
+		Re:       v,
+		Config:   config,
+		Sharding: standardSharding,
+		Selector: monthlyDbSelector,
+		Executor: dbExecutor,
+		Lb:       roundRobinSelector,
 	}
 	return dynamicCluster, func() {
 		cleanup()

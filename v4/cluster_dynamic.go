@@ -19,26 +19,26 @@ func ProvideDynamicRe(conf *Config) (map[string]*sql.DB, error) {
 
 type DynamicCluster struct {
 	mu       sync.RWMutex `wire:"-"`
-	re       map[string]*sql.DB
-	config   *Config
-	sharding Sharding
-	selector DbSelector
-	executor DbExecutor
-	lb       Replication
+	Re       map[string]*sql.DB
+	Config   *Config
+	Sharding Sharding
+	Selector DbSelector
+	Executor DbExecutor
+	Lb       Replication
 }
 
 func (s *DynamicCluster) Write(table string, key []byte, handler DBHandler, params ...interface{}) {
-	di, ti, t := s.sharding.Select(table, key, params...)
-	d := s.selector.Select(di, s.sharding.GetDbname(), params...)
+	di, ti, t := s.Sharding.Select(table, key, params...)
+	d := s.Selector.Select(di, s.Sharding.GetDbname(), params...)
 
 	defer ReleaseBuffer(d)
 
-	conf := s.config.GetShardsConfig()[di].GetMasterConfig()
+	conf := s.Config.GetShardsConfig()[di].GetMasterConfig()
 	dbStr := conf.GetUrl(d.String())
 	s.mu.RLock()
-	if db, ok := s.re[dbStr]; ok {
+	if db, ok := s.Re[dbStr]; ok {
 		s.mu.RUnlock()
-		s.executor(db, handler, ti, t)
+		s.Executor(db, handler, ti, t)
 		return
 	}
 	s.mu.RUnlock()
@@ -46,30 +46,30 @@ func (s *DynamicCluster) Write(table string, key []byte, handler DBHandler, para
 	s.mu.Lock()
 
 	db := NewDB(conf.GetDriver(), dbStr, conf.GetConn())
-	s.re[dbStr] = db
+	s.Re[dbStr] = db
 	s.mu.Unlock()
 
-	s.executor(db, handler, ti, t)
+	s.Executor(db, handler, ti, t)
 
 	return
 }
 
 func (s *DynamicCluster) Read(table string, key []byte, handler DBHandler, params ...interface{}) {
-	di, ti, t := s.sharding.Select(table, key, params...)
-	d := s.selector.Select(di, s.sharding.GetDbname(), params...)
+	di, ti, t := s.Sharding.Select(table, key, params...)
+	d := s.Selector.Select(di, s.Sharding.GetDbname(), params...)
 
 	defer ReleaseBuffer(d)
-	confs := s.config.GetShardsConfig()[di].GetReplicasConfig()
+	confs := s.Config.GetShardsConfig()[di].GetReplicasConfig()
 
-	i := s.lb.Replicate(len(confs))
+	i := s.Lb.Replicate(len(confs))
 
 	conf := confs[i]
 
 	dbStr := conf.GetUrl(d.String())
 	s.mu.RLock()
-	if db, ok := s.re[dbStr]; ok {
+	if db, ok := s.Re[dbStr]; ok {
 		s.mu.RUnlock()
-		s.executor(db, handler, ti, t)
+		s.Executor(db, handler, ti, t)
 		return
 	}
 	s.mu.RUnlock()
@@ -77,20 +77,20 @@ func (s *DynamicCluster) Read(table string, key []byte, handler DBHandler, param
 	s.mu.Lock()
 
 	db := NewDB(conf.GetDriver(), dbStr, conf.GetConn())
-	s.re[dbStr] = db
+	s.Re[dbStr] = db
 	s.mu.Unlock()
 
-	s.executor(db, handler, ti, t)
+	s.Executor(db, handler, ti, t)
 
 	return
 }
 
 func (s *DynamicCluster) TableSelector() TableSelector {
-	return s.sharding.TableSelector()
+	return s.Sharding.TableSelector()
 }
 
 func (s *DynamicCluster) GetShardsTotal() int {
-	return len(s.config.ShardsConfig)
+	return len(s.Config.ShardsConfig)
 }
 
 type DbSelector interface {

@@ -58,7 +58,7 @@ func ProvideConfig(config *YamlConfig) (*Config, error) {
 	}
 
 	if len(scs) != config.Cluster.Sharding.DbTotal {
-		return nil, fmt.Errorf("shards total unequal db instance total")
+		return nil, fmt.Errorf("Shards total unequal db instance total")
 	}
 
 	return &Config{
