@@ -45,7 +45,11 @@ func ProvideStaticShards(conf *Config, sharding Sharding, lb Replication) ([]Sha
 	}
 	var shards []Shard
 	for i, c := range conf.GetShardsConfig() {
-		shards = append(shards, NewShard(c, sharding.Allocation(i, sharding.GetDbname()), lb))
+		if 1 == conf.GetShardingConfig().GetTotal() {
+			shards = append(shards, NewShard(c, sharding.GetDbname(), lb))
+		} else {
+			shards = append(shards, NewShard(c, sharding.Allocation(i, sharding.GetDbname()), lb))
+		}
 	}
 	return shards, nil
 }

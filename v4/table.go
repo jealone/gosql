@@ -21,16 +21,26 @@ type StandardTableSelector struct {
 func (s *StandardTableSelector) Select(table string, key []byte, params ...interface{}) (int, int, *bytes.Buffer) {
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
 	total := s.Total(table)
-	i := s.dp.Partition(key, total)
-	b.WriteString(fmt.Sprintf("%02x", i))
-	return i, total, b
+	var index int
+	if total > 1 {
+		b.WriteByte('_')
+		index = s.dp.Partition(key, total)
+		b.WriteString(fmt.Sprintf("%02x", index))
+	}
+
+	return index, total, b
 }
 
 func (s *StandardTableSelector) Pick(table string, node int, params ...interface{}) *bytes.Buffer {
 	b := AcquireBuffer()
 	b.WriteString(table)
+	total := s.Total(table)
+
+	if total == 1 {
+		return b
+	}
+
 	b.WriteByte('_')
 	b.WriteString(fmt.Sprintf("%02x", node))
 	return b
@@ -68,27 +78,34 @@ func (s *DailyTableSelector) Select(table string, key []byte, params ...interfac
 
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
 	total := s.Total(table)
-	i := s.dp.Partition(key, total)
-	b.WriteString(fmt.Sprintf("%02x", i))
+
+	var index int
+	if total > 1 {
+		b.WriteByte('_')
+		index = s.dp.Partition(key, total)
+		b.WriteString(fmt.Sprintf("%02x", index))
+	}
 
 	if len(params) < 1 {
-		return i, total, b
+		return index, total, b
 	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
 		b.WriteString(time.Unix(ts, 0).Format("20060102"))
 	}
-	return i, total, b
+	return index, total, b
 }
 
 func (s *DailyTableSelector) Pick(table string, node int, params ...interface{}) *bytes.Buffer {
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
-	b.WriteString(fmt.Sprintf("%02x", node))
+	total := s.Total(table)
+	if total > 1 {
+		b.WriteByte('_')
+		b.WriteString(fmt.Sprintf("%02x", node))
+	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
@@ -129,27 +146,35 @@ func (s *MonthlyTableSelector) Select(table string, key []byte, params ...interf
 
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
+
 	total := s.Total(table)
-	i := s.dp.Partition(key, total)
-	b.WriteString(fmt.Sprintf("%02x", i))
+	var index int
+	if total > 1 {
+		b.WriteByte('_')
+		index = s.dp.Partition(key, total)
+		b.WriteString(fmt.Sprintf("%02x", index))
+	}
 
 	if len(params) < 1 {
-		return i, total, b
+		return index, total, b
 	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
 		b.WriteString(time.Unix(ts, 0).Format("200601"))
 	}
-	return i, total, b
+	return index, total, b
 }
 
 func (s *MonthlyTableSelector) Pick(table string, node int, params ...interface{}) *bytes.Buffer {
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
-	b.WriteString(fmt.Sprintf("%02x", node))
+
+	total := s.Total(table)
+	if total > 1 {
+		b.WriteByte('_')
+		b.WriteString(fmt.Sprintf("%02x", node))
+	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
@@ -190,27 +215,35 @@ func (s *AnnuallyTableSelector) Select(table string, key []byte, params ...inter
 
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
+
 	total := s.Total(table)
-	i := s.dp.Partition(key, total)
-	b.WriteString(fmt.Sprintf("%02x", i))
+	var index int
+	if total > 1 {
+		b.WriteByte('_')
+		index = s.dp.Partition(key, total)
+		b.WriteString(fmt.Sprintf("%02x", index))
+	}
 
 	if len(params) < 1 {
-		return i, total, b
+		return index, total, b
 	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
 		b.WriteString(time.Unix(ts, 0).Format("2006"))
 	}
-	return i, total, b
+	return index, total, b
 }
 
 func (s *AnnuallyTableSelector) Pick(table string, node int, params ...interface{}) *bytes.Buffer {
 	b := AcquireBuffer()
 	b.WriteString(table)
-	b.WriteByte('_')
-	b.WriteString(fmt.Sprintf("%02x", node))
+
+	total := s.Total(table)
+	if total > 1 {
+		b.WriteByte('_')
+		b.WriteString(fmt.Sprintf("%02x", node))
+	}
 
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
