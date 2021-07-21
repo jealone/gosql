@@ -3,6 +3,7 @@ package gosql
 import (
 	"bytes"
 	"database/sql"
+	"fmt"
 )
 
 type DBHandler func(*sql.DB, int, *bytes.Buffer) error
@@ -38,15 +39,15 @@ func (s *StaticShard) GetReplicaTotal() int {
 	return len(s.Replica)
 }
 
-func ProvideStaticShards(conf *Config, sharding Sharding, lb Replication) []Shard {
+func ProvideStaticShards(conf *Config, sharding Sharding, lb Replication) ([]Shard, error) {
 	if "static" != conf.GetShardingConfig().GetType() {
-		panic("static cluster type must be static ")
+		return nil, fmt.Errorf("static cluster type must be static ")
 	}
 	var shards []Shard
 	for i, c := range conf.GetShardsConfig() {
 		shards = append(shards, NewShard(c, sharding.Allocation(i, sharding.GetDbname()), lb))
 	}
-	return shards
+	return shards, nil
 }
 
 func NewShard(conf ShardConfig, dbname string, lb Replication) *StaticShard {

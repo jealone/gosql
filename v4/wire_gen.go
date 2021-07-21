@@ -97,7 +97,11 @@ func mockStaticCluster(path string) (*StaticCluster, func(), error) {
 	standardTableSelector := ProvideStandardTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, standardTableSelector)
 	roundRobinSelector := ProvideRoundRobinSelector()
-	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	v, err := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -134,7 +138,11 @@ func mockDailyStaticCluster(path string) (*StaticCluster, func(), error) {
 	dailyTableSelector := ProvideDailyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, dailyTableSelector)
 	roundRobinSelector := ProvideRoundRobinSelector()
-	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	v, err := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -167,7 +175,11 @@ func mockMonthlyStaticCluster(path string) (*StaticCluster, func(), error) {
 	monthlyTableSelector := ProvideMonthlyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, monthlyTableSelector)
 	roundRobinSelector := ProvideRoundRobinSelector()
-	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	v, err := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -200,7 +212,11 @@ func mockAnnuallyStaticCluster(path string) (*StaticCluster, func(), error) {
 	annuallyTableSelector := ProvideAnnuallyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, annuallyTableSelector)
 	roundRobinSelector := ProvideRoundRobinSelector()
-	v := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	v, err := ProvideStaticShards(config, standardSharding, roundRobinSelector)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	dbExecutor := _wireDbExecutorValue
 	staticCluster := &StaticCluster{
 		sharding: standardSharding,
@@ -229,7 +245,11 @@ func mockMonthlyDynamicCluster(path string) (*DynamicCluster, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	v := ProvideDynamicRe(config)
+	v, err := ProvideDynamicRe(config)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	modularHash := distributed.ModularHashIEEE()
 	monthlyTableSelector := ProvideMonthlyTableSelector(config, modularHash)
 	standardSharding := ProvideStandardSharding(config, monthlyTableSelector)

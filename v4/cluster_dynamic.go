@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-func ProvideDynamicRe(conf *Config) map[string]*sql.DB {
+func ProvideDynamicRe(conf *Config) (map[string]*sql.DB, error) {
 	if "dynamic" != conf.GetShardingConfig().GetType() {
-		panic("dynamic cluster type must be dynamic ")
+		return nil, fmt.Errorf("dynamic cluster type must be dynamic ")
 	}
 
 	m := make(map[string]*sql.DB, conf.GetShardingConfig().GetTotal())
-	return m
+	return m, nil
 }
 
 type DynamicCluster struct {
