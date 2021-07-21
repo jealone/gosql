@@ -124,7 +124,12 @@ func wantYamlConfig() *YamlConfig {
 			YamlDBConfig: YamlDBConfig{
 				Driver: "mysql",
 				Dbname: "test",
-				Conn:   YamlConnConfig{},
+				Type:   "static",
+				Conn: YamlConnConfig{
+					MaxIdleConns: 20,
+					MaxLifetime:  5000,
+					MaxOpenConns: 0,
+				},
 			},
 			Sharding: YamlShardingConfig{
 				DbTotal: 2,
