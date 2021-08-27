@@ -107,6 +107,10 @@ func (s *DailyTableSelector) Pick(table string, node int, params ...interface{})
 		b.WriteString(fmt.Sprintf("%02x", node))
 	}
 
+	if len(params) < 1 {
+		return b
+	}
+
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
 		b.WriteString(time.Unix(ts, 0).Format("20060102"))
@@ -176,6 +180,10 @@ func (s *MonthlyTableSelector) Pick(table string, node int, params ...interface{
 		b.WriteString(fmt.Sprintf("%02x", node))
 	}
 
+	if len(params) < 1 {
+		return b
+	}
+
 	if ts, ok := params[0].(int64); ok {
 		b.WriteByte('_')
 		b.WriteString(time.Unix(ts, 0).Format("200601"))
@@ -243,6 +251,10 @@ func (s *AnnuallyTableSelector) Pick(table string, node int, params ...interface
 	if total > 1 {
 		b.WriteByte('_')
 		b.WriteString(fmt.Sprintf("%02x", node))
+	}
+
+	if len(params) < 1 {
+		return b
 	}
 
 	if ts, ok := params[0].(int64); ok {
